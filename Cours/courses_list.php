@@ -26,11 +26,6 @@ if ((isset($_POST['btn-ajoute']))) {
     exit;
 }
 
-
-
-
-
-
 ?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
@@ -81,7 +76,7 @@ if ((isset($_POST['btn-ajoute']))) {
                                     Voir
                                 </a>
 
-                                <a href="courses_edit.php?id=<?php $element['idc']; ?>"
+                                <a href="courses_edit.php?id=<?= $element['idc']; ?>"
                                     class="px-4 py-2 rounded-xl bg-white/30 hover:bg-white/50 transition shadow">
                                     Modifier
                                 </a>

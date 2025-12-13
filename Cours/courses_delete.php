@@ -9,6 +9,24 @@
 </head>
 <?php
 require '../Infastructure/header.php';
+require '../Infastructure/config.php';
+$id_course = $_GET['id'];
+
+
+$datasection = "select * from course where idc =  '$id_course'";
+
+
+
+$resultat = $connectiondb->query($datasection);
+if ((isset($_POST['btn-enregestrer']))) {
+    $titre = $_POST['Title'];
+    $description = $_POST['Description'];
+    $niveau = $_POST['Niveau'];
+    $newdata = "delete from course where idc = '$id_course'";
+    $newcoursedata = $connectiondb->query($newdata);
+    header("Location:courses_list.php");
+    exit;
+}
 ?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 

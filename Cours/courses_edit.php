@@ -11,10 +11,20 @@
 require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 
-$id_course= $_GET['id'];
-$datatoedit="select * from course where idc ='$id_course'";
-$resultat= $connectiondb->query($datatoedit);
-var_dump($resultat);
+$id_course = $_GET['id'];
+
+$datasection = "select * from course where idc =  '$id_course'";
+
+$resultat = $connectiondb->query($datasection);
+if ((isset($_POST['btn-enregestrer']))) {
+    $titre = $_POST['Title'];
+    $description = $_POST['Description'];
+    $niveau = $_POST['Niveau'];
+    $newdata = "update course set title='$titre',description ='$description',levelC='$niveau' where idc = '$id_course'";
+    $newcoursedata = $connectiondb->query($newdata);
+    header("Location:courses_list.php");
+    exit;
+}
 
 ?>
 
@@ -40,60 +50,72 @@ var_dump($resultat);
         </div>
 
         <!-- Form -->
-        <form  method="POST" class="space-y-7">
+
+        <form method="POST" class="space-y-7">
 
             <!-- Title input -->
-            <div>
-                <label class="block text-white font-semibold mb-2">Titre du cours *</label>
-                <input type="text"
-                    value=""
-                    placeholder="Ancien titre du cours"
-                    class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
+            <?php
+            foreach ($resultat as $course) { ?>
+                <div>
+                    <label class="block text-white font-semibold mb-2">Titre du cours *</label>
+                    <input type="text"
+                        name="Title"
+                        value="<?php echo $course['title']; ?>"
+                        placeholder="Ancien titre du cours"
+                        class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                           border border-white/40 focus:ring-2 focus:ring-purple-400 
                           focus:outline-none transition shadow-inner"
-                    required>
-            </div>
+                        required>
+                </div>
 
-            <!-- Description -->
-            <div>
-                <label class="block text-white font-semibold mb-2">Description *</label>
-                <textarea
-                    class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
+                <!-- Description -->
+                <div>
+                    <label class="block text-white font-semibold mb-2">Description *</label>
+                    <textarea
+                        name="Description"
+                        class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                        border border-white/40 h-36 resize-none 
                        focus:ring-2 focus:ring-purple-400 focus:outline-none transition shadow-inner"
-                       placeholder="Ancienne description du cours"
-                    required></textarea>
-            </div>
+                        placeholder="Ancienne description du cours"
+                        required><?php echo $course['description']; ?></textarea>
+                </div>
 
-            <!-- Level -->
-            <div>
-                <label class="block text-white font-semibold mb-2">Niveau *</label>
-                <select
-                    class="w-full p-4 rounded-2xl bg-white/25 text-white border border-white/40 
+                <!-- Level -->
+                <div>
+                    <label class="block text-white font-semibold mb-2">Niveau *</label>
+                    <select
+                        name="Niveau"
+                        class="w-full p-4 rounded-2xl bg-white/25 text-white border border-white/40 
                        focus:ring-2 focus:ring-purple-400 focus:outline-none transition shadow-inner">
-                    <option class="text-gray-800" selected>Intermédiaire</option>
-                    <option class="text-gray-800">Débutant</option>
-                    <option class="text-gray-800">Avancé</option>
-                </select>
-            </div>
+                        <option class="text-gray-800" selected><?php echo $course['levelC']; ?></option>
+                        <option class="text-gray-800">Intermédiaire</option>
+                        <option class="text-gray-800">Débutant</option>
+                        <option class="text-gray-800">Avancé</option>
+                    </select>
+                </div>
 
-            <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6">
+                <!-- Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6">
 
-                <a href="courses_list.php"
-                    class="w-full sm:w-auto text-center px-7 py-3 rounded-2xl 
+                    <a href="courses_list.php"
+                        class="w-full sm:w-auto text-center px-7 py-3 rounded-2xl 
                       bg-white/20 border border-white/40 text-white 
                       hover:bg-white/40 transition font-semibold">
-                    Annuler
-                </a>
+                        Annuler
+                    </a>
 
-                <button
-                    class="w-full sm:w-auto px-9 py-3 rounded-2xl font-bold text-white 
+                    <input
+                        value="Enregistrer"
+                        type="submit"
+                        name="btn-enregestrer"
+                        class="w-full sm:w-auto px-9 py-3 rounded-2xl font-bold text-white 
                        bg-gradient-to-r from-blue-500 to-purple-600 
                        hover:opacity-90 hover:scale-105 transition shadow-xl">
-                    Enregistrer
-                </button>
-            </div>
+                    
+                    
+                </div>
+            <?php } ?>
+
 
         </form>
     </div>
