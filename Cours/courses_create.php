@@ -38,34 +38,35 @@ require '../Infastructure/header.php';
         </div>
 
         <!-- Form -->
-        <form action="#" method="POST" class="space-y-7">
+        <form action="courses_list.php" method="POST" class="space-y-7">
 
             <!-- Title input -->
             <div>
                 <label class="block text-white font-semibold mb-2">Titre du cours *</label>
                 <input type="text"
+                    name="Title"
                     class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                           border border-white/40 focus:ring-2 focus:ring-blue-400 
                           focus:outline-none transition shadow-inner"
-                    placeholder="Ex : Formation HTML & CSS"
-                    required>
+                    placeholder="Ex : Formation HTML & CSS">
             </div>
 
             <!-- Description -->
             <div>
                 <label class="block text-white font-semibold mb-2">Description *</label>
                 <textarea
+                    name="Description"
                     class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                        border border-white/40 h-36 resize-none 
                        focus:ring-2 focus:ring-blue-400 focus:outline-none transition shadow-inner"
-                    placeholder="Résumé du contenu du cours"
-                    required></textarea>
+                    placeholder="Résumé du contenu du cours"></textarea>
             </div>
 
             <!-- Level -->
             <div>
                 <label class="block text-white font-semibold mb-2">Niveau *</label>
                 <select
+                    name="Niveau"
                     class="w-full p-4 rounded-2xl bg-white/25 text-white border border-white/40 
                        focus:ring-2 focus:ring-blue-400 focus:outline-none transition shadow-inner">
                     <option class="text-gray-800">Débutant</option>
@@ -84,13 +85,15 @@ require '../Infastructure/header.php';
                     Retour
                 </a>
 
-                <button
+                <input
+                    type="submit"
+                    value=" Créer le cours"
+                    name="btn-ajoute"
                     class="w-full sm:w-auto px-10 py-3 rounded-2xl font-bold text-white 
                        bg-gradient-to-r from-green-400 to-blue-500 
                        hover:opacity-90 hover:scale-105 transition shadow-xl">
-                    Créer le cours
-                </button>
-            </div>
+               
+                 </div>
 
         </form>
     </div>

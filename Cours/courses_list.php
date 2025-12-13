@@ -11,9 +11,24 @@
 require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 
+
 $datacourse = 'select * from course';
 
 $resultat = $connectiondb->query($datacourse);
+
+if ((isset($_POST['btn-ajoute']))) {
+    $titre = $_POST['Title'];
+    $description = $_POST['Description'];
+    $niveau = $_POST['Niveau'];
+    $newdata = "insert into course (title,description,levelC) values ('$titre','$description','$niveau')";
+    $newcoursedata = $connectiondb->query($newdata);
+    header("Location:courses_list.php");
+    exit;
+}
+
+
+
+
 
 
 ?>
@@ -61,12 +76,12 @@ $resultat = $connectiondb->query($datacourse);
                             <td class="p-4"><?php echo $element['levelC']; ?></td>
 
                             <td class="p-4 flex justify-center gap-3 flex-wrap">
-                                <a href="/Sections/sections_list.php"
+                                <a href="/Sections/sections_list.php?id=<?= $element['idc']; ?>"
                                     class="px-4 py-2 rounded-xl bg-blue-500/50 hover:bg-blue-600 transition shadow">
                                     Voir
                                 </a>
 
-                                <a href="courses_edit.php"
+                                <a href="courses_edit.php?id=<?php $element['idc']; ?>"
                                     class="px-4 py-2 rounded-xl bg-white/30 hover:bg-white/50 transition shadow">
                                     Modifier
                                 </a>

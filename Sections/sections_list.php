@@ -11,9 +11,12 @@
 require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 
-$datasection = 'select * from sections where idc = 3 ';
+$id_course=$_GET['id'];
+
+$datasection = "select * from sections where idc =  '$id_course'";
 
 $resultat = $connectiondb->query($datasection);
+
 ?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">

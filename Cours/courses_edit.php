@@ -9,6 +9,13 @@
 </head>
 <?php
 require '../Infastructure/header.php';
+require '../Infastructure/config.php';
+
+$id_course= $_GET['id'];
+$datatoedit="select * from course where idc ='$id_course'";
+$resultat= $connectiondb->query($datatoedit);
+var_dump($resultat);
+
 ?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
@@ -33,13 +40,14 @@ require '../Infastructure/header.php';
         </div>
 
         <!-- Form -->
-        <form action="#" method="POST" class="space-y-7">
+        <form  method="POST" class="space-y-7">
 
             <!-- Title input -->
             <div>
                 <label class="block text-white font-semibold mb-2">Titre du cours *</label>
                 <input type="text"
-                    value="Ancien titre du cours"
+                    value=""
+                    placeholder="Ancien titre du cours"
                     class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                           border border-white/40 focus:ring-2 focus:ring-purple-400 
                           focus:outline-none transition shadow-inner"
@@ -53,7 +61,8 @@ require '../Infastructure/header.php';
                     class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                        border border-white/40 h-36 resize-none 
                        focus:ring-2 focus:ring-purple-400 focus:outline-none transition shadow-inner"
-                    required>Ancienne description du cours</textarea>
+                       placeholder="Ancienne description du cours"
+                    required></textarea>
             </div>
 
             <!-- Level -->
