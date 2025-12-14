@@ -81,7 +81,7 @@ if ((isset($_POST['btn-ajoute']))) {
                                     Modifier
                                 </a>
 
-                                <a href="courses_delete.php"
+                                <a href="courses_delete.php?id=<?= $element['idc']; ?>"
                                     class="px-4 py-2 rounded-xl bg-red-500/50 hover:bg-red-600 transition shadow">
                                     Supprimer
                                 </a>
