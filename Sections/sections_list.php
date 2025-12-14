@@ -13,9 +13,14 @@ require '../Infastructure/config.php';
 
 $id_course=$_GET['id'];
 
+
 $datasection = "select * from sections where idc =  '$id_course'";
 
 $resultat = $connectiondb->query($datasection);
+
+
+
+
 
 ?>
 
@@ -29,7 +34,7 @@ $resultat = $connectiondb->query($datasection);
                 Liste des sections
             </h1>
 
-            <a href="sections_create.php?course_id=1"
+            <a href="sections_create.php?id=<?= $id_course ; ?> "
                 class="px-7 py-3 rounded-2xl font-semibold text-white 
                   bg-gradient-to-r from-blue-500 to-purple-600
                   hover:opacity-90 transition shadow-lg hover:scale-105">
@@ -54,18 +59,18 @@ $resultat = $connectiondb->query($datasection);
 
                     <?php foreach ($resultat as $element) { ?>
                         <tr class="hover:bg-white/20 transition">
-                            <td class="p-4 font-semibold"><?php echo $element['ids'] ?></td>
-                            <td class="p-4"><?php echo $element['title'] ?></td>
-                            <td class="p-4"><?php echo $element['content'] ?></td>
-                            <td class="p-4"><?php echo $element['idc'] ?></td>
+                            <td class="p-4 font-semibold"><?php echo $element['ids']; ?></td>
+                            <td class="p-4"><?php echo $element['title']; ?></td>
+                            <td class="p-4"><?php echo $element['content']; ?></td>
+                            <td class="p-4"><?php echo $element['idc']; ?></td>
 
                             <td class="p-4 flex justify-center gap-3 flex-wrap">
-                                <a href="sections_edit.php"
+                                <a href="sections_edit.php?idSec=<?= $element['ids']; ?> "
                                     class="px-4 py-2 rounded-xl bg-white/30 hover:bg-white/50 transition shadow">
                                     Modifier
                                 </a>
 
-                                <a href="sections_delete.php"
+                                <a href="sections_delete.php?idSec=<?= $element['ids']; ?> "
                                     class="px-4 py-2 rounded-xl bg-red-500/50 hover:bg-red-600 transition shadow">
                                     Supprimer
                                 </a>

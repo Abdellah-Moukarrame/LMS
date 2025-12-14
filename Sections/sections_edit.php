@@ -9,6 +9,22 @@
 </head>
 <?php
 require '../Infastructure/header.php';
+require '../Infastructure/config.php';
+
+$id_section = $_GET['idSec'];
+
+$datasection = "select * from sections where ids =  '$id_section'";
+
+$resultat = $connectiondb->query($datasection);
+if ((isset($_POST['btn-editsection']))) {
+    $section_title = $_POST['titre'];
+    $section_content = $_POST['content'];
+    $section_position = $_POST['position'];
+    $datasection = $connectiondb->query("update sections set title='$section_title',content='$section_content',idc='$section_position' where ids = '$id_section'");
+
+    header('Lcation:sections_list.php');
+    exit;
+}
 ?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
