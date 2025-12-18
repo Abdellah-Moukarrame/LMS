@@ -10,23 +10,18 @@ if (isset($_POST['btn-login'])) {
     $password = $_POST['Password'];
     $dataclient = "select * from users where email = ? and password = ?";
     $datarow = mysqli_prepare($connectiondb, $dataclient);
-    $res=mysqli_stmt_execute($datarow,[$email,$password]);
+    $res = mysqli_stmt_execute($datarow, [$email, $password]);
     $result = mysqli_stmt_get_result($datarow);
-    $resultat = mysqli_fetch_assoc($result);   
-    
-    if (isset($resultat) ) {
+    $resultat = mysqli_fetch_assoc($result);
+
+    if (isset($resultat)) {
         password_verify($password, $resultat['password']);
         $_SESSION['email'] = $email;
         header("location:../Client/dashboard.php");
         exit;
+    } else {
+        $errormsg = "password & email invalid ";
     }
-    else {
-        $errormsg="password & email invalid ";
-    }
-    
-
-
-    
 }
 
 
@@ -66,7 +61,21 @@ if (isset($_POST['btn-login'])) {
             <form method="post" class="space-y-6">
 
                 <!-- Email -->
-                 <span class="text-red-500"><?= $errormsg; ?></span>
+                <?php if (!empty($errormsg)) { ?>
+                    <div class="mt-2 flex items-start gap-2 
+                    bg-red-500/15 border border-red-500/30 
+                    text-red-200 px-4 py-3 rounded-xl text-sm">
+
+                        <svg class="w-5 h-5 mt-0.5 text-red-400" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
+                        </svg>
+
+                        <span><?= $errormsg; ?></span>
+                    </div>
+                <?php } ?>
+
                 <div>
                     <label class="block text-white mb-2">Email</label>
                     <input type="email" placeholder="example@email.com" name="Email"
@@ -101,8 +110,8 @@ if (isset($_POST['btn-login'])) {
                     class="w-full py-3 rounded-xl font-semibold text-white
                            bg-gradient-to-r from-blue-500 to-purple-600
                            hover:opacity-90 transition shadow-lg">
-                
-                
+
+
 
 
 

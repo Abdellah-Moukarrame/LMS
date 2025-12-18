@@ -1,8 +1,20 @@
 <?php
-    require "../Infastructure/header.php";
+session_start();
+require "../Infastructure/header.php";
+require "../Infastructure/config.php";
+
+$sql="select  count(title) as total_course from course";
+
+$resultat = mysqli_prepare($connectiondb,$sql);
+$dataexecutes = mysqli_stmt_execute($resultat);
+$data = mysqli_stmt_get_result($resultat);
+$totale =mysqli_fetch_assoc($data);
+$_SESSION['total_course'] =  $totale ['total_course'];
+// var_dump($_SESSION['total_course'] );
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,26 +36,26 @@
 
             <nav class="flex flex-col gap-3">
 
-                <a href="#"
-                   class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
+                <a href="courses_list_client.php"
+                    class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
                     📚 Visit Courses
                 </a>
 
-                <a href="#"
-                   class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
+                <a href="courses_enroll_client.php"
+                    class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
                     🎓 My Learning
                 </a>
 
-                <a href="#"
-                   class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
+                <a href="client_infos.php"
+                    class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 transition">
                     👤 My Account
                 </a>
 
             </nav>
 
             <div class="mt-auto">
-                <a href="#"
-                   class="block text-center px-4 py-3 rounded-xl 
+                <a href="../Auth/logout.php"
+                    class="block text-center px-4 py-3 rounded-xl 
                           bg-red-500/60 hover:bg-red-600 transition">
                     Logout
                 </a>
@@ -57,6 +69,47 @@
             <h1 class="text-4xl font-extrabold">
                 Welcome Back 👋
             </h1>
+            <!-- STATS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Total Courses -->
+                <div class="bg-white/20 backdrop-blur-xl rounded-2xl 
+                border border-white/30 p-6 shadow-xl">
+                    <h3 class="text-sm text-white/70 mb-2">Total Courses</h3>
+                    <p class="text-4xl font-extrabold"><?= $totale ['total_course'] ?></p>
+                    <p class="text-sm text-green-400 mt-2">+3 this month</p>
+                </div>
+
+                <!-- Enrolled Courses -->
+                <div class="bg-white/20 backdrop-blur-xl rounded-2xl 
+                border border-white/30 p-6 shadow-xl">
+                    <h3 class="text-sm text-white/70 mb-2">My Courses</h3>
+                    <p class="text-4xl font-extrabold">6</p>
+                    <p class="text-sm text-blue-400 mt-2">In progress</p>
+                </div>
+
+                <!-- Completed -->
+                <div class="bg-white/20 backdrop-blur-xl rounded-2xl 
+                border border-white/30 p-6 shadow-xl">
+                    <h3 class="text-sm text-white/70 mb-2">Completed</h3>
+                    <p class="text-4xl font-extrabold">3</p>
+                    <p class="text-sm text-emerald-400 mt-2">Well done 🎉</p>
+                </div>
+
+                <!-- Progress -->
+                <div class="bg-white/20 backdrop-blur-xl rounded-2xl 
+                border border-white/30 p-6 shadow-xl">
+                    <h3 class="text-sm text-white/70 mb-2">Global Progress</h3>
+                    <p class="text-4xl font-extrabold">58%</p>
+
+                    <!-- Progress bar -->
+                    <div class="w-full bg-white/20 rounded-full h-2 mt-4">
+                        <div class="bg-gradient-to-r from-green-400 to-emerald-500 
+                        h-2 rounded-full w-[58%]"></div>
+                    </div>
+                </div>
+
+            </div>
 
             <!-- Content Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -69,8 +122,8 @@
                     <p class="text-white/80 mb-6">
                         Discover new courses and start learning.
                     </p>
-                    <a href="#"
-                       class="inline-block px-6 py-3 rounded-xl 
+                    <a href="courses_list_client.php"
+                        class="inline-block px-6 py-3 rounded-xl 
                               bg-gradient-to-r from-blue-500 to-purple-600 
                               font-semibold shadow">
                         Explore Courses
@@ -85,8 +138,8 @@
                     <p class="text-white/80 mb-6">
                         Continue your enrolled courses.
                     </p>
-                    <a href="#"
-                       class="inline-block px-6 py-3 rounded-xl 
+                    <a href="courses_enroll_client.php"
+                        class="inline-block px-6 py-3 rounded-xl 
                               bg-gradient-to-r from-green-500 to-emerald-600 
                               font-semibold shadow">
                         My Courses
@@ -134,8 +187,8 @@
     </div>
 
 </body>
+
 </html>
 <?php
-    require "../Infastructure/footer.php";
+require "../Infastructure/footer.php";
 ?>
-
