@@ -13,8 +13,9 @@ require '../Infastructure/config.php';
 if (isset($_POST['btn-addsection'])) {
     $section_title=$_POST['titre'];
     $section_content=$_POST['content'];
-    $section_position=$_POST['position'];
-    $datasection = $connectiondb->query("insert into sections (title,content,idc) values ('$section_title','$section_content','$section_position') ");
+    $id_course=$_GET['id'];
+    // $section_position=$_POST['position'];
+    $datasection = $connectiondb->query("insert into sections (title,content,idc) values ('$section_title','$section_content','$id_course') ");
 
     header('Lcation:sections_list.php');
     exit;
@@ -68,7 +69,7 @@ if (isset($_POST['btn-addsection'])) {
             </div>
 
             <!-- Position -->
-            <div>
+            <!-- <div>
                 <label class="block text-white font-semibold mb-2">Position/Cours a ete assigner *</label>
                 <input type="number"
                     name="position"
@@ -77,7 +78,7 @@ if (isset($_POST['btn-addsection'])) {
                     placeholder="1"
                     min="1"
                     required>
-            </div>
+            </div> -->
 
             <!-- Buttons -->
             <div class="flex items-center gap-4 pt-4">

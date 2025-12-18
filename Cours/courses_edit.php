@@ -65,7 +65,7 @@ if ((isset($_POST['btn-enregestrer']))) {
                         class="w-full p-4 rounded-2xl bg-white/25 text-white placeholder-white/60 
                           border border-white/40 focus:ring-2 focus:ring-purple-400 
                           focus:outline-none transition shadow-inner"
-                        required>
+                        >
                 </div>
 
                 <!-- Description -->
@@ -77,7 +77,7 @@ if ((isset($_POST['btn-enregestrer']))) {
                        border border-white/40 h-36 resize-none 
                        focus:ring-2 focus:ring-purple-400 focus:outline-none transition shadow-inner"
                         placeholder="Ancienne description du cours"
-                        required><?php echo $course['description']; ?></textarea>
+                        ><?php echo $course['description']; ?></textarea>
                 </div>
 
                 <!-- Level -->
@@ -111,8 +111,8 @@ if ((isset($_POST['btn-enregestrer']))) {
                         class="w-full sm:w-auto px-9 py-3 rounded-2xl font-bold text-white 
                        bg-gradient-to-r from-blue-500 to-purple-600 
                        hover:opacity-90 hover:scale-105 transition shadow-xl">
-                    
-                    
+
+
                 </div>
             <?php } ?>
 
@@ -123,6 +123,21 @@ if ((isset($_POST['btn-enregestrer']))) {
     <?php
     require '../Infastructure/footer.php';
     ?>
+    <script>
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(e) {
+            const title = form.Title.value.trim();
+            const description = form.Description.value.trim();
+            const niveau = form.Niveau.value.trim();
+
+            if (!title || !description || !niveau) {
+                e.preventDefault();
+                alert('Veuillez remplir tous les champs correctement.');
+                return false;
+            }
+        });
+    </script>
 </body>
 
 </html>

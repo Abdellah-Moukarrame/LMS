@@ -14,13 +14,13 @@
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 
       <!-- Logo -->
-      <a href="#" class="text-3xl font-extrabold tracking-wide">MyLMS</a>
+      <a href="" class="text-3xl font-extrabold tracking-wide">MyLMS</a>
 
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex gap-8 text-white/90 font-medium">
         <a href="../Cours/courses_create.php" class="hover:text-white transition">Accueil</a>
         <a href="../Cours/courses_list.php" class="hover:text-white transition">Cours</a>
-        <a href="../Sections/sections_list.php" class="hover:text-white transition">Sections</a>
+        <a href="../Auth/register.php" class=" hover:text-white/80">Se Connecter</a>
       </nav>
 
       <!-- Mobile Menu Button -->
@@ -39,10 +39,7 @@
     <div id="mobile-menu" class="hidden md:hidden bg-indigo-700 px-6 pb-6 text-center">
       <a href="../Cours/courses_create.php" class="block py-3 hover:text-white/80">Accueil</a>
       <a href="../Cours/courses_list.php" class="block py-3 hover:text-white/80">Cours</a>
-      <a href="../Sections/sections_list.php" class="block py-3 hover:text-white/80">Sections</a>
-      <a href="#" class="block mt-4 bg-white text-indigo-700 py-2 rounded-full font-semibold hover:scale-105 transition">
-        Se connecter
-      </a>
+      <a href="../Auth/register.php" class="block py-3 hover:text-white/80">Se Connecter</a>
     </div>
   </header>
 

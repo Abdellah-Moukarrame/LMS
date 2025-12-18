@@ -92,8 +92,8 @@ require '../Infastructure/header.php';
                     class="w-full sm:w-auto px-10 py-3 rounded-2xl font-bold text-white 
                        bg-gradient-to-r from-green-400 to-blue-500 
                        hover:opacity-90 hover:scale-105 transition shadow-xl">
-               
-                 </div>
+
+            </div>
 
         </form>
     </div>
@@ -101,6 +101,21 @@ require '../Infastructure/header.php';
     <?php
     require '../Infastructure/footer.php';
     ?>
+    <script>
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(e) {
+            const title = form.Title.value.trim();
+            const description = form.Description.value.trim();
+            const niveau = form.Niveau.value.trim();
+
+            if (!title || !description || !niveau) {
+                e.preventDefault();
+                alert('Veuillez remplir tous les champs correctement.');
+                return false;
+            }
+        });
+    </script>
 
 </body>
 
