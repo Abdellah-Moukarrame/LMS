@@ -14,13 +14,22 @@ if (isset($_POST['btn-login'])) {
     $result = mysqli_stmt_get_result($datarow);
     $resultat = mysqli_fetch_assoc($result);
 
+
+
     if (isset($resultat)) {
         password_verify($password, $resultat['password']);
         $_SESSION['email'] = $email;
+        $_SESSION['user_id'] = $resultat['idU'];
         header("location:../Client/dashboard.php");
         exit;
+    } else if ($email == "admin@admin.lms" && $password == "Adminlms@123") {
+        password_verify($password, "Adminlms@123");
+        $_SESSION['email_admin'] = "admin@admin.lms";
+        $_SESSION['password_admin'] = "Adminlms@123";
+        header("location:../Admin/dashboard_admin.php");
+        exit;
     } else {
-        $errormsg = "password & email invalid ";
+        $errormsg = "password or email invalid ";
     }
 }
 

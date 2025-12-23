@@ -1,10 +1,15 @@
 <?php
+session_start();
+session_unset();
 session_destroy();
-if (session_id()==null) {
-    header("location:login.php");
-    exit;
+header("location:login.php");
+
+if (!isset($_SESSION['user_id'])) {
+     header("location:login.php");
+     exit;
 }
-else {
-    header("location:../Client/dashboard.php");
+if (!isset($_SESSION['email_admin'] ) && !isset($_SESSION['password_admin']) ) {
+    header("location: login.php");
+    exit;
 }
 ?>

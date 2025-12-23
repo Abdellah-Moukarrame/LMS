@@ -55,12 +55,12 @@ $courses = mysqli_stmt_get_result($resultat);
                         <span>⭐ 4.8</span>
                     </div>
 
-                    <button
+                    <a href="courses_enroll_client.php?id_course=<?= $course['idc']; ?>"
                         class="w-full py-3 rounded-xl font-semibold
                                bg-gradient-to-r from-green-500 to-emerald-600
                                hover:opacity-90 transition shadow-lg">
                         ➕ Add to My Courses
-                    </button>
+                    </a>
                 </div>
 
             </div>

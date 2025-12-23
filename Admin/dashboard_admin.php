@@ -4,23 +4,75 @@ session_start();
 // var_dump($_SESSION['total_course'] );
 require "../Infastructure/config.php";
 
-$sqlusers = "select  count(idU) as total_users from users ";
-$resultat = mysqli_prepare($connectiondb,$sqlusers);
-mysqli_stmt_execute($resultat);
-$data=mysqli_stmt_get_result($resultat);
-$totalusers = mysqli_fetch_assoc($data);
+if (!isset($_SESSION['email_admin']) && !isset($_SESSION['password_admin'])) {
+    header("location: ../Auth/logout.php");
+    exit;
+}
+////////////Total courses
+$sql = "select  count(title) as total_course from course";
 
-$sqlinscriptions = "select count(id_course) as total_inscriptions from erollement";
-$resultatinscriptions = mysqli_prepare($connectiondb,$sqlinscriptions);
+$resultat = mysqli_prepare($connectiondb, $sql);
+$dataexecutes = mysqli_stmt_execute($resultat);
+$data = mysqli_stmt_get_result($resultat);
+$totale = mysqli_fetch_assoc($data);
+////////////Total users
+$sql_users = "select  count(idU) as total_users from users ";
+$resultat = mysqli_prepare($connectiondb, $sql_users);
+mysqli_stmt_execute($resultat);
+$data = mysqli_stmt_get_result($resultat);
+$totalusers = mysqli_fetch_assoc($data);
+////////////////Total inscription
+$sql_inscriptions = "select count(id_course) as total_inscriptions from erollement";
+$resultatinscriptions = mysqli_prepare($connectiondb, $sql_inscriptions);
 mysqli_stmt_execute($resultatinscriptions);
 $datainscriptions = mysqli_stmt_get_result($resultatinscriptions);
-$totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
+$totaleinscriptions = mysqli_fetch_assoc($datainscriptions);
+///////////////Cour avec plus des section
+$sql_cours_plus_section = "select  course.title , count(sections.ids) as total_sections from course join sections on sections.idc = course.idc group by course.title order by total_sections desc limit 5 ";
+$resultat_cours_plus_section = mysqli_prepare($connectiondb, $sql_cours_plus_section);
+mysqli_stmt_execute($resultat_cours_plus_section);
 
+$data_cours_plus_sections = mysqli_stmt_get_result($resultat_cours_plus_section);
 
+$cours_plus_section = mysqli_fetch_all($data_cours_plus_sections, MYSQLI_ASSOC);
 
+//////////////Utilisateurs inscrits cette année
 
+$sql_inscrit_cette_annees = "select distinct users.name , users.email from users join erollement on users.idU = erollement.id_user where year(erollement.date_inscription) = year(curdate()) ";
+$resultat_inscrit_cette_annees = mysqli_prepare($connectiondb, $sql_inscrit_cette_annees);
+mysqli_stmt_execute($resultat_inscrit_cette_annees);
+$data_inscrit_cette_annees = mysqli_stmt_get_result($resultat_inscrit_cette_annees);
+$inscrit_cette_annees = mysqli_fetch_all($data_inscrit_cette_annees, MYSQLI_ASSOC);
 
+////////////Course sana inscription
+$sql_cours_sans_inscription = "select course.title , course.created_at from course left join erollement on course.idc = erollement.id_course where erollement.id_course = null ";
+$resultat_cours_sans_inscription = mysqli_prepare($connectiondb, $sql_cours_sans_inscription);
+mysqli_stmt_execute($resultat_cours_sans_inscription);
+$data_cours_sans_inscription = mysqli_stmt_get_result($resultat_cours_sans_inscription);
+$cours_sans_inscription = mysqli_fetch_all($data_cours_sans_inscription);
 
+///////////////Dernières inscriptions
+
+$sql_dernier_inscription = "select users.name , course.title , erollement.date_inscription from erollement join course on course.idc = erollement.id_course join users on users.idU = erollement.id_user order by erollement.date_inscription desc limit 3";
+$resultat_dernier_inscription = mysqli_prepare($connectiondb, $sql_dernier_inscription);
+mysqli_stmt_execute($resultat_dernier_inscription);
+$data_dernier_inscription = mysqli_stmt_get_result($resultat_dernier_inscription);
+$dernier_inscription = mysqli_fetch_all($data_dernier_inscription, MYSQLI_ASSOC);
+
+//////////////Cours plus populaire
+$sql_plus_populaire="select course.title , count(erollement.id_user) as totalInscp from course join erollement on erollement.id_course = course.idc group by course.title order by totalInscp limit 1 ";
+$resultat_plus_populaire = mysqli_prepare($connectiondb,$sql_plus_populaire);
+mysqli_stmt_execute($resultat_plus_populaire);
+$data_plus_populaire = mysqli_stmt_get_result($resultat_plus_populaire);
+$cours_plus_populaire = mysqli_fetch_assoc($data_plus_populaire);
+
+/////////////////Avg Section/Cours
+
+$sql_avg = "select avg(total_section) as moyenne from (select course.idc , count(*) as total_section from course join sections on sections.idc = course.idc group by course.idc) t";
+$resultat_avg = mysqli_prepare($connectiondb,$sql_avg);
+mysqli_stmt_execute($resultat_avg);
+$data_avg = mysqli_stmt_get_result($resultat_avg);
+$avg = mysqli_fetch_assoc($data_avg);
 ?>
 
 <!DOCTYPE html>
@@ -36,10 +88,39 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
 <body class="bg-gray-100 min-h-screen">
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 shadow-lg">
-        <h1 class="text-3xl font-bold">📊 Admin Dashboard</h1>
-        <p class="text-white/80">Vue générale de la plateforme</p>
+    <!-- NAVBAR -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+            <!-- Logo / Title -->
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">📊</span>
+                <h1 class="text-2xl font-extrabold">Admin Panel</h1>
+            </div>
+
+            <!-- Menu -->
+            <nav class="flex items-center gap-6 text-sm font-semibold">
+
+                <a href="admin_dashboard.php"
+                    class="hover:text-white/80 transition">
+                    🏠 Accueil
+                </a>
+
+                <a href="../Cours/courses_list.php"
+                    class="hover:text-white/80 transition">
+                    📚 Cours
+                </a>
+
+                <a href="../Auth/logout.php"
+                    class="px-4 py-2 rounded-xl 
+                      bg-red-500/70 hover:bg-red-600 transition">
+                    🚪 Logout
+                </a>
+
+            </nav>
+        </div>
     </header>
+
 
     <main class="p-8 max-w-7xl mx-auto space-y-10">
 
@@ -47,7 +128,7 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-gray-500 text-sm">Nombre Total de Cours</p>
-                <h2 class="text-3xl font-bold mt-2"><?php echo $_SESSION['total_course']; ?></h2>
+                <h2 class="text-3xl font-bold mt-2"><?= $totale['total_course'] ?></h2>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6">
@@ -62,12 +143,12 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
 
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-gray-500 text-sm">Cours le Plus Populaire</p>
-                <h2 class="text-xl font-semibold mt-2">Laravel Avancé</h2>
+                <h2 class="text-xl font-semibold mt-2"><?= $cours_plus_populaire['title'] ?></h2>
             </div>
 
             <div class="bg-white rounded-2xl shadow p-6">
                 <p class="text-gray-500 text-sm">Sections / Cours (Moyenne)</p>
-                <h2 class="text-3xl font-bold mt-2">8.4</h2>
+                <h2 class="text-3xl font-bold mt-2"><?= $avg['moyenne'] ?></h2>
             </div>
         </section>
 
@@ -85,18 +166,12 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b">
-                            <td class="py-2">Web Development</td>
-                            <td>7</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="py-2">PHP & MySQL</td>
-                            <td>9</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2">Laravel</td>
-                            <td>12</td>
-                        </tr>
+                        <?php foreach ($cours_plus_section as $row) { ?>
+                            <tr class="border-b">
+                                <td class="py-2"><?= $row['title']  ?></td>
+                                <td><?= $row['total_sections']  ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -112,18 +187,12 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b">
-                            <td class="py-2">Ali Ahmed</td>
-                            <td>ali@mail.com</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="py-2">Sara Ben</td>
-                            <td>sara@mail.com</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2">Yassine Omar</td>
-                            <td>yassine@mail.com</td>
-                        </tr>
+                        <?php foreach ($inscrit_cette_annees as $row) { ?>
+                            <tr class="border-b">
+                                <td class="py-2"><?= $row['name']  ?></td>
+                                <td><?= $row['email']  ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -139,14 +208,12 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b">
-                            <td class="py-2">Flutter Basics</td>
-                            <td>2024-01-10</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2">Docker Intro</td>
-                            <td>2024-02-05</td>
-                        </tr>
+                        <?php foreach ($cours_sans_inscription as $row) { ?>
+                            <tr class="border-b">
+                                <td class="py-2"><?= $row['title'] ?></td>
+                                <td><?= $row['created_at'] ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -163,16 +230,12 @@ $totaleinscriptions=mysqli_fetch_assoc($datainscriptions);
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="border-b">
-                            <td class="py-2">Ali Ahmed</td>
-                            <td>Laravel</td>
-                            <td>2025-03-01</td>
-                        </tr>
-                        <tr>
-                            <td class="py-2">Sara Ben</td>
-                            <td>PHP & MySQL</td>
-                            <td>2025-03-02</td>
-                        </tr>
+                        <?php foreach ($dernier_inscription as $row) { ?><tr>
+                                <td class="py-2"> <?= $row['name'] ?></td>
+                                <td> <?= $row['title'] ?></td>
+                                <td> <?= $row['date_inscription'] ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

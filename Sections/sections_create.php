@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer une section</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
 <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+     header("location:../Error/accessdenied.php");
+     exit;
+}
+if (isset($_SESSION['user_id'])) {
+     header("location:../Error/accessdenied.php");
+     exit;
+}
 require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 if (isset($_POST['btn-addsection'])) {
@@ -23,6 +24,15 @@ if (isset($_POST['btn-addsection'])) {
 }
 
 ?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une section</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
 

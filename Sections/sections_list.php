@@ -1,3 +1,25 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("location:../Error/accessdenied.php");
+    exit;
+}
+if (isset($_SESSION['user_id'])) {
+    header("location:../Error/accessdenied.php");
+    exit;
+}
+require '../Infastructure/header.php';
+require '../Infastructure/config.php';
+
+$id_course = $_GET['id'];
+
+
+$datasection = "select * from sections where idc =  '$id_course'";
+
+$resultat = $connectiondb->query($datasection);
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,22 +29,7 @@
     <title>Liste des sections</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<?php
-require '../Infastructure/header.php';
-require '../Infastructure/config.php';
 
-$id_course=$_GET['id'];
-
-
-$datasection = "select * from sections where idc =  '$id_course'";
-
-$resultat = $connectiondb->query($datasection);
-
-
-
-
-
-?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
 
@@ -34,7 +41,7 @@ $resultat = $connectiondb->query($datasection);
                 Liste des sections
             </h1>
 
-            <a href="sections_create.php?id=<?= $id_course ; ?> "
+            <a href="sections_create.php?id=<?= $id_course; ?> "
                 class="px-7 py-3 rounded-2xl font-semibold text-white 
                   bg-gradient-to-r from-blue-500 to-purple-600
                   hover:opacity-90 transition shadow-lg hover:scale-105">

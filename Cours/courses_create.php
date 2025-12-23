@@ -1,3 +1,15 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("location:../Error/accessdenied.php");
+    exit;
+}
+if (isset($_SESSION['user_id'])) {
+    header("location:../Error/accessdenied.php");
+    exit;
+}
+require '../Infastructure/header.php';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -7,9 +19,6 @@
     <title>Créer un cours</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<?php
-require '../Infastructure/header.php';
-?>
 
 <body class="min-h-screen bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 flex items-center justify-center p-6">
 
