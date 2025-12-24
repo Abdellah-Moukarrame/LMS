@@ -15,7 +15,7 @@ if ((isset($_POST['btn-delete']))) {
     header("Location:courses_list.php");
     exit;
 }
-if (!isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === false) {
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] === false) {
     header("Location: ../Error/accessdenied.php");
     exit;
 } 

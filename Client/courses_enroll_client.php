@@ -1,18 +1,38 @@
 <?php
 session_start();
+require "../Infastructure/config.php";
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../Auth/login.php");
+    exit;
+}
+if (!isset($_GET['id_course'])) {
+    header("Location: courses_list_client.php");
+    exit;
+}
 require "../Infastructure/header.php";
 require "../Infastructure/config.php";
+
+
 
 $idCourse = $_GET['id_course'];
 $idUser = $_SESSION['user_id'];
 $course_id = $idCourse;
 $user_id   = $idUser;
+
+$sql_check = "select 1 from erollement where id_course = ? and id_user = ?";
+$check_course_user = mysqli_prepare($connectiondb, $sql_check);
+mysqli_stmt_bind_param($check_course_user, "ii", $course_id, $user_id);
+mysqli_stmt_execute($check_course_user);
+$resultat_check = mysqli_stmt_get_result($check_course_user); 
+
+if(mysqli_num_rows($resultat_check) == 0){
 $sql_insert_into_enroll = "insert into erollement (id_course,id_user) values ( ? , ? )";
 $resultat_insert_into_enroll = mysqli_prepare($connectiondb, $sql_insert_into_enroll);
 mysqli_stmt_bind_param($resultat_insert_into_enroll, "ii", $course_id, $user_id);
 mysqli_stmt_execute($resultat_insert_into_enroll);
+}
 
-$sql_enroll_course = "select distinct course.title as title_course , course.description as description_course , users.* from erollement join course on erollement.id_course = course.idc join users on erollement.id_user where  users.idU  = ?  ";
+$sql_enroll_course = "select distinct course.title as title_course , course.description as description_course , users.* from erollement join course on erollement.id_course = course.idc join users on erollement.id_user = users.idU where  users.idU  = ?  ";
 $resultat = mysqli_prepare($connectiondb, $sql_enroll_course);
 mysqli_stmt_bind_param($resultat, "i",  $user_id);
 mysqli_stmt_execute($resultat);

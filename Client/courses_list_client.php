@@ -1,7 +1,14 @@
 <?php
-
+session_start();
 require "../Infastructure/header.php";
 require "../Infastructure/config.php";
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../Auth/login.php");
+    exit;
+}
+
+
 
 $sql = "select * from course";
 $resultat = mysqli_prepare($connectiondb, $sql);
