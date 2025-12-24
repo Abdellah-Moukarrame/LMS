@@ -8,25 +8,27 @@ $errormsg = '';
 if (isset($_POST['btn-login'])) {
     $email = $_POST['Email'];
     $password = $_POST['Password'];
-    $dataclient = "select * from users where email = ? and password = ?";
+    $dataclient = "select * from users where email = ? ";
     $datarow = mysqli_prepare($connectiondb, $dataclient);
-    $res = mysqli_stmt_execute($datarow, [$email, $password]);
+    mysqli_stmt_bind_param($datarow,"s",$email);
+    mysqli_stmt_execute($datarow);
     $result = mysqli_stmt_get_result($datarow);
     $resultat = mysqli_fetch_assoc($result);
 
+    /////////////Admin 
+    if ($email == "admin@admin.lms" && $password == "Adminlms@123") {
+        $_SESSION['is_admin'] = true;
+        $_SESSION['email_admin'] = $email;
+        header("location:../Admin/dashboard_admin.php");
+        exit;
+    }
 
-
-    if (isset($resultat)) {
-        password_verify($password, $resultat['password']);
+/////////////User
+    if (isset($resultat) && password_verify($password, $resultat['password'])) {
+        $_SESSION['is_admin'] = false;
         $_SESSION['email'] = $email;
         $_SESSION['user_id'] = $resultat['idU'];
         header("location:../Client/dashboard.php");
-        exit;
-    } else if ($email == "admin@admin.lms" && $password == "Adminlms@123") {
-        password_verify($password, "Adminlms@123");
-        $_SESSION['email_admin'] = "admin@admin.lms";
-        $_SESSION['password_admin'] = "Adminlms@123";
-        header("location:../Admin/dashboard_admin.php");
         exit;
     } else {
         $errormsg = "password or email invalid ";

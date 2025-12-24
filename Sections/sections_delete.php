@@ -1,14 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-     header("location:../Error/accessdenied.php");
-     exit;
-}
-if (isset($_SESSION['user_id'])) {
-     header("location:../Error/accessdenied.php");
-     exit;
-}
+if (!isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === false) {
+    header("Location: ../Error/accessdenied.php");
+    exit;
+} 
 require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 $id_section = $_GET['idSec'];

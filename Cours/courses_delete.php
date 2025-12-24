@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../Infastructure/header.php';
+// require '../Infastructure/header.php';
 require '../Infastructure/config.php';
 $id_course = $_GET['id'];
 
@@ -15,14 +15,10 @@ if ((isset($_POST['btn-delete']))) {
     header("Location:courses_list.php");
     exit;
 }
-if (!isset($_SESSION['user_id'])) {
-     header("location:../Error/accessdenied.php");
-     exit;
-}
-if (isset($_SESSION['user_id'])) {
-     header("location:../Error/accessdenied.php");
-     exit;
-}
+if (!isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === false) {
+    header("Location: ../Error/accessdenied.php");
+    exit;
+} 
 ?>
 <!DOCTYPE html>
 <html lang="fr">

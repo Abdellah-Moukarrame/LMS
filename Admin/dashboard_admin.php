@@ -101,11 +101,6 @@ $avg = mysqli_fetch_assoc($data_avg);
             <!-- Menu -->
             <nav class="flex items-center gap-6 text-sm font-semibold">
 
-                <a href="admin_dashboard.php"
-                    class="hover:text-white/80 transition">
-                    🏠 Accueil
-                </a>
-
                 <a href="../Cours/courses_list.php"
                     class="hover:text-white/80 transition">
                     📚 Cours
